@@ -47,6 +47,7 @@
 		6ABF5A8F26FA20550044906D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6ABF5A9326FA20560044906D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6ABF5A9626FA20560044906D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6AD844BF26FCF97B00262671 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +99,7 @@
 				6ABF5A8D26FA20550044906D /* AppDelegate.swift */,
 				6ABF5A8F26FA20550044906D /* ContentView.swift */,
 				6ABF5A9326FA20560044906D /* Assets.xcassets */,
+				6AD844BF26FCF97B00262671 /* Info.plist */,
 				6A87349326FB690500D031F9 /* Models */,
 				6ABF5A9E26FA30740044906D /* Images */,
 				6A87347A26FB626D00D031F9 /* Textures */,
@@ -349,7 +351,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ImageAnchor/Preview Content\"";
-				DEVELOPMENT_TEAM = HY8AUX8L27;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageAnchor/Info.plist;
@@ -380,7 +382,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ImageAnchor/Preview Content\"";
-				DEVELOPMENT_TEAM = HY8AUX8L27;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageAnchor/Info.plist;
