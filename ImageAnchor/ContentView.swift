@@ -143,15 +143,16 @@ class SimpleARView: ARView, ARSessionDelegate {
         anchors.compactMap { $0 as? ARImageAnchor }.forEach {
             // Create anchor from image.
             let anchorEntity = AnchorEntity(anchor: $0)
-
-            // Call setup method.
-            setupEntities(anchorEntity: anchorEntity)
-
+            
             // Track image anchors added to scene.
             imageAnchorToEntity[$0] = anchorEntity
-
+            
             // Add anchor to scene.
             arView.scene.addAnchor(anchorEntity)
+            
+            // Call setup method for entities.
+            // IMPORTANT: Play USDZ animations after entity is added to the scene.
+            setupEntities(anchorEntity: anchorEntity)
         }
     }
     
