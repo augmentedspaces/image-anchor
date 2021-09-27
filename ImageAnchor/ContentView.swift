@@ -10,6 +10,9 @@ import SwiftUI
 import ARKit
 import RealityKit
 import Combine
+import CoreMotion
+import AVFoundation
+import CoreAudio
 
 
 // MARK: - View model for handling communication between the UI and ARView.
@@ -73,7 +76,12 @@ class SimpleARView: ARView, ARSessionDelegate {
     
     // Variable for tracking ambient light intensity.
     var ambientIntensity: Double = 0
+    
+    // Motion manager for tracking movement.
+    let motionManager = CMMotionManager()
 
+    // Recorder for microphone usage.
+    var recorder: AVAudioRecorder!
 
     init(frame: CGRect, viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -93,9 +101,47 @@ class SimpleARView: ARView, ARSessionDelegate {
         
         UIApplication.shared.isIdleTimerDisabled = true
         
+        setupMotionManager()
+        
+        setupMicrophoneSensor()
+        
         setupScene()
         
         setupMaterials()
+    }
+    
+    func setupMotionManager() {
+        motionManager.startAccelerometerUpdates()
+        motionManager.startGyroUpdates()
+        motionManager.startMagnetometerUpdates()
+        motionManager.startDeviceMotionUpdates()
+    }
+    
+    func setupMicrophoneSensor() {
+        let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
+        let url = documents.appendingPathComponent("record.caf")
+
+        let recordSettings: [String: Any] = [
+            AVFormatIDKey:              kAudioFormatAppleIMA4,
+            AVSampleRateKey:            44100.0,
+            AVNumberOfChannelsKey:      2,
+            AVEncoderBitRateKey:        12800,
+            AVLinearPCMBitDepthKey:     16,
+            AVEncoderAudioQualityKey:   AVAudioQuality.max.rawValue
+        ]
+
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord)
+            try audioSession.setActive(true)
+            try recorder = AVAudioRecorder(url:url, settings: recordSettings)
+        } catch {
+            return
+        }
+
+        recorder.prepareToRecord()
+        recorder.isMeteringEnabled = true
+        recorder.record()
     }
     
     func setupScene() {
@@ -230,7 +276,39 @@ class SimpleARView: ARView, ARSessionDelegate {
         boxEntity?.orientation *= simd_quatf(angle: 0.02, axis: [0, 1, 0])
  
         
-        // Sensor Value: ambientIntensity
-        // print(ambientIntensity)
+        ////////////////////////////////////////////////////////////////////////////
+        // Sensor: Ambient light intensity
+        print("ambientIntensity: ", ambientIntensity)
+
+
+        ////////////////////////////////////////////////////////////////////////////
+        // Sensor: Accelerometer data
+        if let accelerometerData = motionManager.accelerometerData {
+            print("accelerometerData x: ", accelerometerData.acceleration.x)
+            print("accelerometerData y: ", accelerometerData.acceleration.y)
+            print("accelerometerData z: ", accelerometerData.acceleration.z)
+        }
+
+        // Other motion sensor data.
+        /*
+        if let gyroData = motionManager.gyroData {
+            print(gyroData.rotationRate.x)
+        }
+        if let magnetometerData = motionManager.magnetometerData {
+            print(magnetometerData)
+        }
+        if let deviceMotion = motionManager.deviceMotion {
+            print(deviceMotion.userAcceleration)
+        }
+        */
+
+
+        ////////////////////////////////////////////////////////////////////////////
+        // Sensor: Decibel power
+        recorder.updateMeters()
+        let decibelPower = recorder.averagePower(forChannel: 0)
+        print("decibelPower: ", decibelPower)
+
+
     }
 }
